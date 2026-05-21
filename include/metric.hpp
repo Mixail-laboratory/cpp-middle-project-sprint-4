@@ -19,10 +19,6 @@
 
 #include "function.hpp"
 
-namespace fs = std::filesystem;
-namespace rv = std::ranges::views;
-namespace rs = std::ranges;
-
 namespace analyzer::metric {
 
 struct MetricResult {

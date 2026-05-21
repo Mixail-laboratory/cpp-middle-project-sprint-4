@@ -1,3 +1,4 @@
+#include <stdexcept>
 #include <unistd.h>
 
 #include <algorithm>
@@ -25,8 +26,6 @@
 
 namespace analyzer {
 
-namespace rv = std::ranges::views;
-namespace rs = std::ranges;
 /**
  * @brief Анализирует список Python-файлов и извлекает метрики для всех функций и методов.
  *
@@ -46,8 +45,12 @@ auto AnalyseFunctions(const std::vector<std::string> &files,
         function::FunctionExtractor extractor;
         const auto &metrics = extractor.Get(file::File(iFileName));
         std::ranges::for_each(metrics, [&metric_extractor, &results](const function::Function &iFunction) {
-            const auto res = metric_extractor.Get(iFunction);
-            results.emplace_back(iFunction, res);
+            try {
+                const auto res = metric_extractor.Get(iFunction);
+                results.emplace_back(iFunction, res);
+            } catch (std::runtime_error &err) {
+                throw;
+            }
         });
     });
     return results;
@@ -104,7 +107,6 @@ void AccumulateFunctionAnalysis(const auto &analysis,
                                 const analyzer::metric_accumulator::MetricsAccumulator &accumulator) {
     std::ranges::for_each(analysis,
                           [&accumulator](const auto &elem) { accumulator.AccumulateNextFunctionResults(elem.second); });
-    // здесь ваш код
 }
 
 }  // namespace analyzer

@@ -37,7 +37,6 @@ void MetricsAccumulator::AccumulateNextFunctionResults(const std::vector<metric:
     std::ranges::for_each(metric_results, [this](const metric::MetricResult &metric) {
         accumulators.at(metric.metric_name)->Accumulate(metric);
     });
-    // здесь ваш код
 }
 /**
  * @brief Сбрасывает состояние всех аккумуляторов.
